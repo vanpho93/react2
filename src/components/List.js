@@ -1,63 +1,32 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import Word from "./Word";
+import WordForm from './WordForm';
+import WordFilter from './WordFilter';
 
 class List extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            words: [
-                { en: 'one', vn: 'mot' },
-                { en: 'two', vn: 'hai' }, 
-                { en: 'three', vn: 'ba' },
-            ],
-            txtEn: '',
-            txtVn: ''
-        }
-        this.onAddWord = this.onAddWord.bind(this);
-        this.removeWord = this.removeWord.bind(this);
+        this.toggleIsShowForm = this.toggleIsShowForm.bind(this);
     }
-
-    onAddWord() {
-        const { txtEn, txtVn } = this.state;
-        this.setState((prevState) => ({
-            words: prevState.words.concat({en: txtEn, vn: txtVn}),
-            txtEn: "",
-            txtVn: ""
-        }))
+    toggleIsShowForm() {
+        this.props.dispatch({ type: 'TOGGLE_IS_SHOW_FORM' });
     }
-
-    removeWord(en) {
-        this.setState(prevState => {
-            const newWords = prevState.words.filter(word => word.en !== en)
-            return {
-                words: newWords
-            };
-        })
-    }
-
     render() {
-        const { words, txtVn, txtEn } = this.state;
+        const { words, isShowForm } = this.props;
         return (
             <div>
-                <input 
-                    onChange={event => this.setState({ txtEn: event.target.value })}
-                    value={txtEn} 
-                    placeholder="English" 
-                />
-                <br /><br />
-                <input 
-                    onChange={event => this.setState({ txtVn: event.target.value })}
-                    value={txtVn} 
-                    placeholder="Vietnamese" 
-                />
-                <br /><br />
-                <button onClick={this.onAddWord}>Add new word</button>
-            {
-                words.map(spot => <Word spot={spot} onRemove={() => this.removeWord(spot.en)} />)
-            }
+                { 
+                    isShowForm ? <WordForm /> : <button onClick={this.toggleIsShowForm}>Toggle Form</button>}
+                <hr />
+                <WordFilter />
+                { words.map(spot => <Word key={spot.en} spot={spot} />) }
             </div>
         );
     }
 }
 
-export default List;
+const mapState = (state) => ({ isShowForm: state.isShowForm, words: state.words })
+
+export default connect(mapState)(List);
