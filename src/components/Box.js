@@ -1,35 +1,50 @@
 import React, { Component } from 'react';
 
+class CounterController extends Component {
+    render() {
+        return (
+            <div style={{ backgroundColor: '#A293BD', padding: 10 }}>
+                <h4>Child Button</h4>
+                <button onClick={this.props.addChild}>Increase</button>
+                <button onClick={this.props.minusChild}>Decrease</button>
+            </div>
+        )
+    }
+}
+
 export default class Box extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 2
+            value: 10
         }
         this.addOne = this.addOne.bind(this);
+        this.minusOne = this.minusOne.bind(this);
     }
 
     addOne() {
-        this.setState((prevState) => ({value: prevState.value + 1}))
+        this.setState(prevState => ({value: prevState.value + 1}))
+    }
+
+    minusOne() {
+        this.setState(prevState => ({value: prevState.value - 1}))
     }
 
     render() {
-        // let style = {color: "green"};
-        // if (this.state.value % 2 === 0){
-        //     style = {color: "red"}
-        // } 
-        // let style = this.state.value % 2 === 0 ? {color: "red"} : { color: 'green' };
-        const color = this.state.value % 2 === 0 ? 'red' : 'green';
+        const { value } = this.state;
         return (
             <div>
-                <h3 style={{ color }}>{this.state.value}</h3>
-                <button onClick={this.addOne}>Increase</button>
+                <h3>{value}</h3>
+                <div style={{ backgroundColor: '#ADCEB3', padding: 10 }}>
+                    <h4>Parent Button</h4>
+                    <button onClick={this.addOne}>Increase</button>
+                    <button onClick={this.minusOne}>Decrease</button>
+                </div>
+                <CounterController 
+                   addChild={this.addOne}
+                   minusChild={this.minusOne}
+                />
             </div>
         );
     }
 }
-
-const arr1 = [1, 4, 5, 3, 5];
-
-console.log(arr1.map(num => num * num))
-

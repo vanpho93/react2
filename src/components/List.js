@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Word from "./Word";
 
 class List extends Component {
     constructor(props) {
@@ -18,18 +19,20 @@ class List extends Component {
 
     onAddWord() {
         const { txtEn, txtVn } = this.state;
-        this.setState(prevState => ({
-            words: prevState.words.concat({ en: txtEn, vn: txtVn }),
-            txtEn: '',
-            txtVn: ''
-        }));
+        this.setState((prevState) => ({
+            words: prevState.words.concat({en: txtEn, vn: txtVn}),
+            txtEn: "",
+            txtVn: ""
+        }))
     }
 
     removeWord(en) {
         this.setState(prevState => {
-            const newWords = prevState.words.filter(word => word.en !== en);
-            return { words: newWords };
-        });
+            const newWords = prevState.words.filter(word => word.en !== en)
+            return {
+                words: newWords
+            };
+        })
     }
 
     render() {
@@ -50,13 +53,7 @@ class List extends Component {
                 <br /><br />
                 <button onClick={this.onAddWord}>Add new word</button>
             {
-                words.map(e =>
-                    <div key={e.en}>
-                        <p>{e.en}</p>
-                        <h3>{e.vn}</h3>
-                        <button onClick={() => this.removeWord(e.en)}>remove</button>
-                    </div>
-                )
+                words.map(spot => <Word spot={spot} onRemove={() => this.removeWord(spot.en)} />)
             }
             </div>
         );
